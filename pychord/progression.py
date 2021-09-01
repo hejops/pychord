@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from .chord import as_chord, Chord
+from .constants.scales import RELATIVE_KEY_DICT, NOTE_VAL_DICT
 
 
 class ChordProgression(object):
@@ -104,3 +105,28 @@ class ChordProgression(object):
         """
         for chord in self._chords:
             chord.transpose(trans)
+
+    def make_chord_progression(self) -> tuple[list[Chord], str]:
+
+        import random
+
+        root = random.choice(list(NOTE_VAL_DICT)) 
+        mode = random.choice(list(RELATIVE_KEY_DICT)) 
+        scale = root + mode
+
+        FUNCTIONS = {
+            "tonic": 1,
+            "predominant": [2, 3, 6],
+            "dominant": [4, 5, 7],
+        }
+
+        p = random.choice(list(FUNCTIONS["predominant"]))
+        d = random.choice(list(FUNCTIONS["dominant"]))
+
+        T1 = Chord.from_note_index(note=1, quality=random.choice(["", "7"]), scale=scale, diatonic=True)
+        P = Chord.from_note_index(note=p, quality=random.choice(["", "7"]), scale=scale, diatonic=True)
+        D = Chord.from_note_index(note=d, quality=random.choice(["", "7"]), scale=scale, diatonic=True)
+        T2 = Chord.from_note_index(note=1, quality=random.choice(["", "7"]), scale=scale, diatonic=True)
+
+        progression = [T1, P, D, T2]
+        return progression, scale
